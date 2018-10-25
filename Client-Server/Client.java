@@ -8,7 +8,7 @@ public class Client {
         int bytesRead;
         int currentTot = 0;
         try {
-            Socket s = new Socket("192.168.29.165", 15123);
+            Socket s = new Socket(local_ipv4_address_here, 15123); // run ipconfig in cmd, and search for ipv4 address in local area connection.
             BufferedReader readKb = new BufferedReader(new InputStreamReader(System.in));
             PrintStream writeS = new PrintStream(s.getOutputStream(), true);
             BufferedReader readS = new BufferedReader(new InputStreamReader(s.getInputStream()));
