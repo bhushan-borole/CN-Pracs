@@ -53,6 +53,46 @@ public class FramingMethods {
         frame = frame.replace("0", "L ");
         frame = frame.replace("1", "H ");
         System.out.println(frame);
-}
+    }
 
 }
+
+/*
+Output:
+Enter String:
+abc ghi jkl
+1.Character Count
+2.Bit Stuffing
+3.Byte Stuffing
+4.Physical layer violation
+Enter Option:
+1
+[3abc, 3ghi, 3jkl]
+Enter String:
+0101111110010
+1.Character Count
+2.Bit Stuffing
+3.Byte Stuffing
+4.Physical layer violation
+Enter Option:
+2
+01111110_01011111010010_01111110
+Enter String:
+esc abc flag rgh flag esc
+1.Character Count
+2.Bit Stuffing
+3.Byte Stuffing
+4.Physical layer violation
+Enter Option:
+3
+flag_esc esc abc Esc flag rgh Esc flag esc esc_flag
+Enter String:
+101010100000101
+1.Character Count
+2.Bit Stuffing
+3.Byte Stuffing
+4.Physical layer violation
+Enter Option:
+4
+H L H L H L H L L L L L H L H
+ */
