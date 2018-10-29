@@ -1,39 +1,32 @@
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.net.*;
-import java.io.*;
-public class Server{
-    static Socket s;
-    static ServerSocket serverSocket;
-    public static void main (String [] args ) throws IOException, ScriptException {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Server {
+    static final int PORT = 15123;
+    public static void main (String [] args ) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        Socket socket = serverSocket.accept();
+
+        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
+        Scanner scanner = new Scanner(System.in);
         while(true){
+            String messageFromClient = dataInputStream.readUTF();
+            System.out.println("Client: " + messageFromClient);
 
-            ServerSocket serverSocket = new ServerSocket(15123);
-            s = serverSocket.accept();
-            System.out.println("Accepted connection : " + s);
+            System.out.println("Enter Message: ");
+            String s = scanner.nextLine();
 
-            BufferedReader readKb = new BufferedReader(new InputStreamReader(System.in));
-            PrintStream writeC = new PrintStream(s.getOutputStream(), true);
-            BufferedReader readC = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            String msgFromC , msgToC;
-            while(true){
-                if((msgFromC = readC.readLine()) != null )
-                    System.out.println("CLient " + "name" + ":" + msgFromC);
-                msgToC = readKb.readLine();
-                writeC.println(msgToC);
-                writeC.flush();
-            }
+            dataOutputStream.writeUTF(s);
 
+            dataOutputStream.flush();
 
         }
 
-
-        //s.close();
-        //System.out.println("File transfer complete");
     }
-
-
 }
-
-
