@@ -1,44 +1,34 @@
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.net.*;
-import java.io.*;
-public class Server{
-    static Socket s;
-    static ServerSocket serverSocket;
-    public static void main (String [] args ) throws IOException, ScriptException {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+    static final int PORT = 15123;
+    public static void main(String[] args) throws IOException, ScriptException {
+
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        Socket socket = serverSocket.accept();
+
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+
         while(true){
+            String s = dataInputStream.readUTF();
 
-            ServerSocket serverSocket = new ServerSocket(15123);
-            s = serverSocket.accept();
-            System.out.println("Accepted connection : " + s);
+            ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
+            String result = scriptEngine.eval(s).toString();
 
-            BufferedReader readKb = new BufferedReader(new InputStreamReader(System.in));
-            PrintStream writeC = new PrintStream(s.getOutputStream(), true);
-            BufferedReader readC = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            String msgFromC , msgToC;
-            while(true){
-                if((msgFromC = readC.readLine()) != null )
-                    System.out.println("CLient " + "name" + ":" + msgFromC);
-                // The below three lines are used for maths purposes, client will provide the equation
-                //   and server will solve the equation and return the result
-                ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-                ScriptEngine a = scriptEngineManager.getEngineByName("js");
-                String sum = a.eval(msgFromC).toString();
-		
-                writeC.println(sum);
-                writeC.flush();
-            }
+            dataOutputStream.writeUTF(result);
+
+            
 
 
         }
-
-
-        //s.close();
-        //System.out.println("File transfer complete");
     }
-
-
 }
-
-
