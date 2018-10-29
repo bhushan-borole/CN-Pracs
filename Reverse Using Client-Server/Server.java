@@ -1,40 +1,26 @@
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.net.*;
+
+
 import java.io.*;
-public class Server{
-    static Socket s;
-    static ServerSocket serverSocket;
-    public static void main (String [] args ) throws IOException, ScriptException {
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+    static final int PORT = 15123;
+    public static void main (String [] args ) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        Socket socket = serverSocket.accept();
+
+        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
         while(true){
+            String s = dataInputStream.readUTF();
 
-            ServerSocket serverSocket = new ServerSocket(15123);
-            s = serverSocket.accept();
-            System.out.println("Accepted connection : " + s);
+            StringBuilder sb = new StringBuilder(s);
 
-            BufferedReader readKb = new BufferedReader(new InputStreamReader(System.in));
-            PrintStream writeC = new PrintStream(s.getOutputStream(), true);
-            BufferedReader readC = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            String msgFromC , msgToC;
-            while(true){
-                if((msgFromC = readC.readLine()) != null )
-                    System.out.println("CLient " + "name" + ":" + msgFromC);
-                StringBuilder sb = new StringBuilder(msgFromC);
-
-                writeC.println(sb.reverse().toString());
-                writeC.flush();
-            }
-
+            dataOutputStream.writeUTF(String.valueOf(sb.reverse()));
 
         }
 
-
-        //s.close();
-        //System.out.println("File transfer complete");
     }
-
-
 }
-
-
